@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 1.0.0
-Release  : 1
+Release  : 2
 URL      : https://github.com/kata-containers/runtime/archive/1.0.0.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/1.0.0.tar.gz
 Summary  : No detailed summary available
@@ -46,7 +46,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1527093514
+export SOURCE_DATE_EPOCH=1527178518
 %autogen --disable-static ;export GOPATH="${PWD}/gopath/" \
 ;mkdir -p "${GOPATH}/src/github.com/kata-containers/" \
 ;ln -sf "${PWD}" "${GOPATH}/src/github.com/kata-containers/runtime" \
@@ -54,13 +54,16 @@ export SOURCE_DATE_EPOCH=1527093514
 make  %{?_smp_mflags} QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
 
 %install
-export SOURCE_DATE_EPOCH=1527093514
+export SOURCE_DATE_EPOCH=1527178518
 rm -rf %{buildroot}
 %make_install BASH_COMPLETIONSDIR=%{buildroot}/usr/share/bash-completion/completions/kata-runtime DESTTARGET=%{buildroot}/usr/bin/kata-runtime DESTCONFIG=%{buildroot}/usr/share/defaults/kata-containers/configuration.toml SCRIPTS_DIR=%{buildroot}/usr/bin QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
+## make_install_append content
+sed -i -e '/^initrd =/d' %{buildroot}/usr/share/defaults/kata-containers/configuration.toml
+## make_install_append end
 
 %files
 %defattr(-,root,root,-)
-/builddir/build/BUILDROOT/kata-runtime-1.0.0-1.x86_64/usr/bin/kata-collect-data.sh
+/builddir/build/BUILDROOT/kata-runtime-1.0.0-2.x86_64/usr/bin/kata-collect-data.sh
 
 %files bin
 %defattr(-,root,root,-)
