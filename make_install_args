@@ -1,1 +1,1 @@
-BASH_COMPLETIONSDIR=%{buildroot}/usr/share/bash-completion/completions/kata-runtime DESTTARGET=%{buildroot}/usr/bin/kata-runtime DESTCONFIG=%{buildroot}/usr/share/defaults/kata-containers/configuration.toml SCRIPTS_DIR=%{buildroot}/usr/bin QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
+BASH_COMPLETIONSDIR=%{buildroot}/usr/share/bash-completion/completions/kata-runtime DESTTARGET=%{buildroot}/usr/bin/kata-runtime DESTCONFIG=%{buildroot}/usr/share/defaults/kata-containers/configuration.toml QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
