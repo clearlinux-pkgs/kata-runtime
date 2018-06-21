@@ -1,1 +1,4 @@
 sed -i -e '/^initrd =/d' %{buildroot}/usr/share/defaults/kata-containers/configuration.toml
+install -m 0755 -D set-docker-default-runtime %{buildroot}/usr/bin/set-docker-default-runtime
+install -m 0644 -D clearlinux.conf %{buildroot}/usr/lib/systemd/system/docker.service.d/clearlinux.conf
+install -m 0644 -D docker-set-runtime.service %{buildroot}/usr/lib/systemd/system/docker-set-runtime.service
