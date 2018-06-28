@@ -1,9 +1,10 @@
-From b2c5d8486a1f8c74f4f67046dd9fb70dd7f50d6e Mon Sep 17 00:00:00 2001
+From 943aa1c3697bea0b7dfe5bdeaef018589c568904 Mon Sep 17 00:00:00 2001
 From: William Douglas <william.douglas@intel.com>
 Date: Thu, 21 Jun 2018 23:11:44 +0000
-Subject: [PATCH] Add Clear Linux docker integration for kata containers
+Subject: [PATCH] Add Clear Linux Docker integration for Kata Containers
 
-Set kata containers as the default docker runtime on Clear Linux.
+Add Kata Containers as a runtime option for Docker, but do not make the
+default.
 ---
  clearlinux.conf            | 8 ++++++++
  docker-set-runtime.service | 8 ++++++++
@@ -15,7 +16,7 @@ Set kata containers as the default docker runtime on Clear Linux.
 
 diff --git a/clearlinux.conf b/clearlinux.conf
 new file mode 100644
-index 0000000..7546ab6
+index 0000000..6587392
 --- /dev/null
 +++ b/clearlinux.conf
 @@ -0,0 +1,8 @@
@@ -24,7 +25,7 @@ index 0000000..7546ab6
 +After=docker-set-runtime.service
 +
 +[Service]
-+Environment="DOCKER_EXTRA_RUNTIMES=--add-runtime cc-runtime=/usr/bin/cc-runtime"
++Environment="DOCKER_EXTRA_RUNTIMES=--add-runtime cc-runtime=/usr/bin/cc-runtime --add-runtime kata-runtime=/usr/bin/kata-runtime"
 +ExecStart=
 +ExecStart=/usr/bin/dockerd $DOCKER_EXTRA_RUNTIMES $DOCKER_DEFAULT_RUNTIME --storage-driver=overlay2
 diff --git a/docker-set-runtime.service b/docker-set-runtime.service
@@ -52,5 +53,5 @@ index 0000000..8934b13
 +mkdir -p /etc/systemd/system/docker.service.d/
 +echo -e '[Service]\nEnvironment="DOCKER_DEFAULT_RUNTIME=--default-runtime cc-runtime"' > /etc/systemd/system/docker.service.d/50-runtime.conf
 -- 
-2.17.1
+2.18.0
 

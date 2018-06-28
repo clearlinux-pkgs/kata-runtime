@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 1.0.0
-Release  : 5
+Release  : 6
 URL      : https://github.com/kata-containers/runtime/archive/1.0.0.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/1.0.0.tar.gz
 Summary  : No detailed summary available
@@ -16,7 +16,7 @@ Requires: kata-runtime-data
 Requires: kata-runtime-license
 BuildRequires : go
 Patch1: 0001-add-fake-autogen.patch
-Patch2: 0002-Add-Clear-Linux-docker-integration-for-kata-containe.patch
+Patch2: 0002-Add-Clear-Linux-Docker-integration-for-Kata-Containe.patch
 
 %description
 [![Build Status](https://travis-ci.org/kata-containers/runtime.svg?branch=master)](https://travis-ci.org/kata-containers/runtime)
@@ -76,7 +76,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1530122327
+export SOURCE_DATE_EPOCH=1530230351
 %autogen --disable-static ;export GOPATH="${PWD}/gopath/" \
 ;mkdir -p "${GOPATH}/src/github.com/kata-containers/" \
 ;ln -sf "${PWD}" "${GOPATH}/src/github.com/kata-containers/runtime" \
@@ -84,7 +84,7 @@ export SOURCE_DATE_EPOCH=1530122327
 make  %{?_smp_mflags} QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
 
 %install
-export SOURCE_DATE_EPOCH=1530122327
+export SOURCE_DATE_EPOCH=1530230351
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/doc/kata-runtime
 cp LICENSE %{buildroot}/usr/share/doc/kata-runtime/LICENSE
