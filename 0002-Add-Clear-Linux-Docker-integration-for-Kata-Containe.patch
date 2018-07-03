@@ -1,19 +1,29 @@
-From 943aa1c3697bea0b7dfe5bdeaef018589c568904 Mon Sep 17 00:00:00 2001
+From c1655e45c85603e4f50ff52db2388e8bdf5e5f13 Mon Sep 17 00:00:00 2001
 From: William Douglas <william.douglas@intel.com>
 Date: Thu, 21 Jun 2018 23:11:44 +0000
-Subject: [PATCH] Add Clear Linux Docker integration for Kata Containers
+Subject: [PATCH] Add Clear Linux docker integration for kata containers
 
-Add Kata Containers as a runtime option for Docker, but do not make the
-default.
+Add Kata Containers as a runtime option for Docker, but do not make
+the default.
 ---
+ 50-runtime.conf            | 2 ++
  clearlinux.conf            | 8 ++++++++
  docker-set-runtime.service | 8 ++++++++
- set-docker-default-runtime | 4 ++++
- 3 files changed, 20 insertions(+)
+ set-docker-default-runtime | 5 +++++
+ 4 files changed, 23 insertions(+)
+ create mode 100644 50-runtime.conf
  create mode 100644 clearlinux.conf
  create mode 100644 docker-set-runtime.service
  create mode 100755 set-docker-default-runtime
 
+diff --git a/50-runtime.conf b/50-runtime.conf
+new file mode 100644
+index 0000000..e05cf06
+--- /dev/null
++++ b/50-runtime.conf
+@@ -0,0 +1,2 @@
++[Service]
++Environment="DOCKER_DEFAULT_RUNTIME=--default-runtime runc"
 diff --git a/clearlinux.conf b/clearlinux.conf
 new file mode 100644
 index 0000000..6587392
@@ -44,14 +54,15 @@ index 0000000..0cc4fdd
 +ExecStart=/usr/bin/set-docker-default-runtime
 diff --git a/set-docker-default-runtime b/set-docker-default-runtime
 new file mode 100755
-index 0000000..8934b13
+index 0000000..e13104f
 --- /dev/null
 +++ b/set-docker-default-runtime
-@@ -0,0 +1,4 @@
+@@ -0,0 +1,5 @@
 +#!/bin/bash
 +
 +mkdir -p /etc/systemd/system/docker.service.d/
 +echo -e '[Service]\nEnvironment="DOCKER_DEFAULT_RUNTIME=--default-runtime cc-runtime"' > /etc/systemd/system/docker.service.d/50-runtime.conf
++systemctl daemon-reload
 -- 
 2.18.0
 

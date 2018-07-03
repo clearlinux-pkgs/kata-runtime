@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 1.0.0
-Release  : 6
+Release  : 7
 URL      : https://github.com/kata-containers/runtime/archive/1.0.0.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/1.0.0.tar.gz
 Summary  : No detailed summary available
@@ -76,7 +76,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1530230351
+export SOURCE_DATE_EPOCH=1530654222
 %autogen --disable-static ;export GOPATH="${PWD}/gopath/" \
 ;mkdir -p "${GOPATH}/src/github.com/kata-containers/" \
 ;ln -sf "${PWD}" "${GOPATH}/src/github.com/kata-containers/runtime" \
@@ -84,7 +84,7 @@ export SOURCE_DATE_EPOCH=1530230351
 make  %{?_smp_mflags} QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
 
 %install
-export SOURCE_DATE_EPOCH=1530230351
+export SOURCE_DATE_EPOCH=1530654222
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/doc/kata-runtime
 cp LICENSE %{buildroot}/usr/share/doc/kata-runtime/LICENSE
@@ -132,6 +132,7 @@ cp vendor/github.com/BurntSushi/toml/cmd/toml-test-decoder/COPYING %{buildroot}/
 sed -i -e '/^initrd =/d' %{buildroot}/usr/share/defaults/kata-containers/configuration.toml
 install -m 0755 -D set-docker-default-runtime %{buildroot}/usr/bin/set-docker-default-runtime
 install -m 0644 -D clearlinux.conf %{buildroot}/usr/lib/systemd/system/docker.service.d/clearlinux.conf
+install -m 0644 -D 50-runtime.conf %{buildroot}/usr/lib/systemd/system/docker.service.d/50-runtime.conf
 install -m 0644 -D docker-set-runtime.service %{buildroot}/usr/lib/systemd/system/docker-set-runtime.service
 ## make_install_append end
 
@@ -147,6 +148,7 @@ install -m 0644 -D docker-set-runtime.service %{buildroot}/usr/lib/systemd/syste
 %files config
 %defattr(-,root,root,-)
 /usr/lib/systemd/system/docker-set-runtime.service
+/usr/lib/systemd/system/docker.service.d/50-runtime.conf
 /usr/lib/systemd/system/docker.service.d/clearlinux.conf
 
 %files data
