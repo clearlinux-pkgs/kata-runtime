@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 1.1.0
-Release  : 9
+Release  : 10
 URL      : https://github.com/kata-containers/runtime/archive/1.1.0.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/1.1.0.tar.gz
 Summary  : No detailed summary available
@@ -59,7 +59,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1533139355
+export SOURCE_DATE_EPOCH=1533141300
 %autogen --disable-static ;export GOPATH="${PWD}/gopath/" \
 ;mkdir -p "${GOPATH}/src/github.com/kata-containers/" \
 ;ln -sf "${PWD}" "${GOPATH}/src/github.com/kata-containers/runtime" \
@@ -67,9 +67,9 @@ export SOURCE_DATE_EPOCH=1533139355
 make  %{?_smp_mflags} QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
 
 %install
-export SOURCE_DATE_EPOCH=1533139355
+export SOURCE_DATE_EPOCH=1533141300
 rm -rf %{buildroot}
-%make_install BASH_COMPLETIONSDIR=%{buildroot}/usr/share/bash-completion/completions/kata-runtime DESTTARGET=%{buildroot}/usr/bin/kata-runtime DESTCONFIG=%{buildroot}/usr/share/defaults/kata-containers/configuration.toml QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
+%make_install DESTTARGET=%{buildroot}/usr/bin/kata-runtime DESTCONFIG=%{buildroot}/usr/share/defaults/kata-containers/configuration.toml QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
 ## make_install_append content
 sed -i -e '/^initrd =/d' %{buildroot}/usr/share/defaults/kata-containers/configuration.toml
 install -m 0755 -D set-docker-default-runtime %{buildroot}/usr/bin/set-docker-default-runtime
@@ -80,7 +80,6 @@ install -m 0644 -D docker-set-runtime.service %{buildroot}/usr/lib/systemd/syste
 
 %files
 %defattr(-,root,root,-)
-/builddir/build/BUILDROOT/kata-runtime-1.1.0-8.x86_64/usr/share/bash-completion/completions/kata-runtime/kata-runtime
 /usr/local/bin/kata-collect-data.sh
 /usr/local/bin/kata-runtime
 
@@ -96,4 +95,5 @@ install -m 0644 -D docker-set-runtime.service %{buildroot}/usr/lib/systemd/syste
 
 %files data
 %defattr(-,root,root,-)
+/usr/share/bash-completion/completions/kata-runtime
 /usr/share/defaults/kata-containers/configuration.toml
