@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 1.1.0
-Release  : 10
+Release  : 11
 URL      : https://github.com/kata-containers/runtime/archive/1.1.0.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/1.1.0.tar.gz
 Summary  : No detailed summary available
