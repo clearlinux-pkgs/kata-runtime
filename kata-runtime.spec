@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 1.1.0
-Release  : 12
+Release  : 13
 URL      : https://github.com/kata-containers/runtime/archive/1.1.0.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/1.1.0.tar.gz
 Summary  : No detailed summary available
@@ -13,7 +13,8 @@ License  : Apache-2.0 BSD-2-Clause BSD-3-Clause ISC MIT MPL-2.0-no-copyleft-exce
 Requires: kata-runtime-bin
 Requires: kata-runtime-config
 Requires: kata-runtime-data
-BuildRequires : go
+Requires: kata-runtime-license
+BuildRequires : buildreq-golang
 Patch1: 0001-add-fake-autogen.patch
 Patch2: 0002-Add-Clear-Linux-Docker-integration-for-Kata-Containe.patch
 
@@ -28,6 +29,7 @@ Summary: bin components for the kata-runtime package.
 Group: Binaries
 Requires: kata-runtime-data
 Requires: kata-runtime-config
+Requires: kata-runtime-license
 
 %description bin
 bin components for the kata-runtime package.
@@ -49,6 +51,22 @@ Group: Data
 data components for the kata-runtime package.
 
 
+%package doc
+Summary: doc components for the kata-runtime package.
+Group: Documentation
+
+%description doc
+doc components for the kata-runtime package.
+
+
+%package license
+Summary: license components for the kata-runtime package.
+Group: Default
+
+%description license
+license components for the kata-runtime package.
+
+
 %prep
 %setup -q -n runtime-1.1.0
 %patch1 -p1
@@ -59,26 +77,65 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1533323813
+export SOURCE_DATE_EPOCH=1533656808
 %autogen --disable-static ;export GOPATH="${PWD}/gopath/" \
 ;mkdir -p "${GOPATH}/src/github.com/kata-containers/" \
 ;ln -sf "${PWD}" "${GOPATH}/src/github.com/kata-containers/runtime" \
 ;cd "${GOPATH}/src/github.com/kata-containers/runtime"
-make  %{?_smp_mflags} QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
+make  %{?_smp_mflags} PREFIX=/usr/ DESTDIR=%{buildroot} QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
 
 %install
-export SOURCE_DATE_EPOCH=1533323813
+export SOURCE_DATE_EPOCH=1533656808
 rm -rf %{buildroot}
-%make_install DESTTARGET=%{buildroot}/usr/bin/kata-runtime DESTCONFIG=%{buildroot}/usr/share/defaults/kata-containers/configuration.toml QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
-## make_install_append content
+mkdir -p %{buildroot}/usr/share/doc/kata-runtime
+cp LICENSE %{buildroot}/usr/share/doc/kata-runtime/LICENSE
+cp vendor/github.com/BurntSushi/toml/COPYING %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_BurntSushi_toml_COPYING
+cp vendor/github.com/BurntSushi/toml/cmd/toml-test-decoder/COPYING %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_BurntSushi_toml_cmd_toml-test-decoder_COPYING
+cp vendor/github.com/BurntSushi/toml/cmd/toml-test-encoder/COPYING %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_BurntSushi_toml_cmd_toml-test-encoder_COPYING
+cp vendor/github.com/BurntSushi/toml/cmd/tomlv/COPYING %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_BurntSushi_toml_cmd_tomlv_COPYING
+cp vendor/github.com/clearcontainers/proxy/COPYING %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_clearcontainers_proxy_COPYING
+cp vendor/github.com/containerd/cri-containerd/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_containerd_cri-containerd_LICENSE
+cp vendor/github.com/containernetworking/cni/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_containernetworking_cni_LICENSE
+cp vendor/github.com/containernetworking/plugins/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_containernetworking_plugins_LICENSE
+cp vendor/github.com/davecgh/go-spew/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_davecgh_go-spew_LICENSE
+cp vendor/github.com/dlespiau/covertool/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_dlespiau_covertool_LICENSE
+cp vendor/github.com/docker/go-units/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_docker_go-units_LICENSE
+cp vendor/github.com/go-ini/ini/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_go-ini_ini_LICENSE
+cp vendor/github.com/gogo/protobuf/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_gogo_protobuf_LICENSE
+cp vendor/github.com/golang/protobuf/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_golang_protobuf_LICENSE
+cp vendor/github.com/hashicorp/yamux/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_hashicorp_yamux_LICENSE
+cp vendor/github.com/intel/govmm/COPYING %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_intel_govmm_COPYING
+cp vendor/github.com/kata-containers/agent/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_kata-containers_agent_LICENSE
+cp vendor/github.com/kubernetes-incubator/cri-o/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_kubernetes-incubator_cri-o_LICENSE
+cp vendor/github.com/mdlayher/vsock/LICENSE.md %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_mdlayher_vsock_LICENSE.md
+cp vendor/github.com/mitchellh/mapstructure/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_mitchellh_mapstructure_LICENSE
+cp vendor/github.com/opencontainers/runc/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_opencontainers_runc_LICENSE
+cp vendor/github.com/opencontainers/runtime-spec/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_opencontainers_runtime-spec_LICENSE
+cp vendor/github.com/pmezard/go-difflib/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_pmezard_go-difflib_LICENSE
+cp vendor/github.com/safchain/ethtool/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_safchain_ethtool_LICENSE
+cp vendor/github.com/seccomp/libseccomp-golang/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_seccomp_libseccomp-golang_LICENSE
+cp vendor/github.com/sirupsen/logrus/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_sirupsen_logrus_LICENSE
+cp vendor/github.com/stretchr/testify/LICENCE.txt %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_stretchr_testify_LICENCE.txt
+cp vendor/github.com/stretchr/testify/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_stretchr_testify_LICENSE
+cp vendor/github.com/urfave/cli/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_urfave_cli_LICENSE
+cp vendor/github.com/vishvananda/netlink/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_vishvananda_netlink_LICENSE
+cp vendor/github.com/vishvananda/netns/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_github.com_vishvananda_netns_LICENSE
+cp vendor/golang.org/x/crypto/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_golang.org_x_crypto_LICENSE
+cp vendor/golang.org/x/net/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_golang.org_x_net_LICENSE
+cp vendor/golang.org/x/sys/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_golang.org_x_sys_LICENSE
+cp vendor/golang.org/x/text/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_golang.org_x_text_LICENSE
+cp vendor/google.golang.org/genproto/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_google.golang.org_genproto_LICENSE
+cp vendor/google.golang.org/grpc/LICENSE %{buildroot}/usr/share/doc/kata-runtime/vendor_google.golang.org_grpc_LICENSE
+cp virtcontainers/LICENSE %{buildroot}/usr/share/doc/kata-runtime/virtcontainers_LICENSE
+cp virtcontainers/pkg/oci/LICENSE %{buildroot}/usr/share/doc/kata-runtime/virtcontainers_pkg_oci_LICENSE
+%make_install PREFIX=/usr/ DESTDIR=%{buildroot} DESTCONFIG=%{buildroot}/usr/share/defaults/kata-containers/configuration.toml QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
+## install_append content
 sed -i -e '/^initrd =/d' %{buildroot}/usr/share/defaults/kata-containers/configuration.toml
 install -m 0755 -D set-docker-default-runtime %{buildroot}/usr/bin/set-docker-default-runtime
 install -m 0644 -D clearlinux.conf %{buildroot}/usr/lib/systemd/system/docker.service.d/clearlinux.conf
 install -m 0644 -D 50-runtime.conf %{buildroot}/usr/lib/systemd/system/docker.service.d/50-runtime.conf
 install -m 0644 -D docker-set-runtime.service %{buildroot}/usr/lib/systemd/system/docker-set-runtime.service
-mv %{buildroot}/usr/local/bin/kata-collect-data.sh %{buildroot}/usr/bin/kata-collect-data.sh
-mv %{buildroot}/usr/local/bin/kata-runtime %{buildroot}/usr/bin/kata-runtime
-## make_install_append end
+## install_append end
 
 %files
 %defattr(-,root,root,-)
@@ -99,3 +156,49 @@ mv %{buildroot}/usr/local/bin/kata-runtime %{buildroot}/usr/bin/kata-runtime
 %defattr(-,root,root,-)
 /usr/share/bash-completion/completions/kata-runtime
 /usr/share/defaults/kata-containers/configuration.toml
+
+%files doc
+%defattr(0644,root,root,0755)
+%doc /usr/share/doc/kata\-runtime/*
+
+%files license
+%defattr(-,root,root,-)
+/usr/share/doc/kata-runtime/LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_BurntSushi_toml_COPYING
+/usr/share/doc/kata-runtime/vendor_github.com_BurntSushi_toml_cmd_toml-test-decoder_COPYING
+/usr/share/doc/kata-runtime/vendor_github.com_BurntSushi_toml_cmd_toml-test-encoder_COPYING
+/usr/share/doc/kata-runtime/vendor_github.com_BurntSushi_toml_cmd_tomlv_COPYING
+/usr/share/doc/kata-runtime/vendor_github.com_clearcontainers_proxy_COPYING
+/usr/share/doc/kata-runtime/vendor_github.com_containerd_cri-containerd_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_containernetworking_cni_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_containernetworking_plugins_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_davecgh_go-spew_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_dlespiau_covertool_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_docker_go-units_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_go-ini_ini_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_gogo_protobuf_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_golang_protobuf_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_hashicorp_yamux_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_intel_govmm_COPYING
+/usr/share/doc/kata-runtime/vendor_github.com_kata-containers_agent_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_kubernetes-incubator_cri-o_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_mdlayher_vsock_LICENSE.md
+/usr/share/doc/kata-runtime/vendor_github.com_mitchellh_mapstructure_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_opencontainers_runc_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_opencontainers_runtime-spec_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_pmezard_go-difflib_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_safchain_ethtool_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_seccomp_libseccomp-golang_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_sirupsen_logrus_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_stretchr_testify_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_urfave_cli_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_vishvananda_netlink_LICENSE
+/usr/share/doc/kata-runtime/vendor_github.com_vishvananda_netns_LICENSE
+/usr/share/doc/kata-runtime/vendor_golang.org_x_crypto_LICENSE
+/usr/share/doc/kata-runtime/vendor_golang.org_x_net_LICENSE
+/usr/share/doc/kata-runtime/vendor_golang.org_x_sys_LICENSE
+/usr/share/doc/kata-runtime/vendor_golang.org_x_text_LICENSE
+/usr/share/doc/kata-runtime/vendor_google.golang.org_genproto_LICENSE
+/usr/share/doc/kata-runtime/vendor_google.golang.org_grpc_LICENSE
+/usr/share/doc/kata-runtime/virtcontainers_LICENSE
+/usr/share/doc/kata-runtime/virtcontainers_pkg_oci_LICENSE

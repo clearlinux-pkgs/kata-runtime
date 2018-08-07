@@ -3,7 +3,3 @@ install -m 0755 -D set-docker-default-runtime %{buildroot}/usr/bin/set-docker-de
 install -m 0644 -D clearlinux.conf %{buildroot}/usr/lib/systemd/system/docker.service.d/clearlinux.conf
 install -m 0644 -D 50-runtime.conf %{buildroot}/usr/lib/systemd/system/docker.service.d/50-runtime.conf
 install -m 0644 -D docker-set-runtime.service %{buildroot}/usr/lib/systemd/system/docker-set-runtime.service
-
-
-mv %{buildroot}/usr/local/bin/kata-collect-data.sh %{buildroot}/usr/bin/kata-collect-data.sh
-mv %{buildroot}/usr/local/bin/kata-runtime %{buildroot}/usr/bin/kata-runtime

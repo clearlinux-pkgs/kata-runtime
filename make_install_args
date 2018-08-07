@@ -1,1 +1,1 @@
-DESTTARGET=%{buildroot}/usr/bin/kata-runtime DESTCONFIG=%{buildroot}/usr/share/defaults/kata-containers/configuration.toml QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
+PREFIX=/usr/ DESTDIR=%{buildroot} DESTCONFIG=%{buildroot}/usr/share/defaults/kata-containers/configuration.toml QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
