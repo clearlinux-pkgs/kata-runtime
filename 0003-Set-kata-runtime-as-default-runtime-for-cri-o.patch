@@ -1,0 +1,53 @@
+From 4b98dca5ad846ab352e79580a529b6324b64e3c8 Mon Sep 17 00:00:00 2001
+From: Daniela Plascencia <daniela.plascencia@linux.intel.com>
+Date: Mon, 20 Aug 2018 17:23:22 -0500
+Subject: [PATCH] Set kata-runtime as default runtime for cri-o.
+
+As it was done for Docker, the runtime configuration for cri-o will be done
+automatically when Kata Containers is installed on a Clear Linux system.
+
+Signed-off-by: Daniela Plascencia <daniela.plascencia@linux.intel.com>
+---
+ crio-clearlinux.conf     | 3 +++
+ crio-set-runtime.service | 6 ++++++
+ set-crio-default-runtime | 5 +++++
+ 3 files changed, 14 insertions(+)
+ create mode 100644 crio-clearlinux.conf
+ create mode 100644 crio-set-runtime.service
+ create mode 100644 set-crio-default-runtime
+
+diff --git a/crio-clearlinux.conf b/crio-clearlinux.conf
+new file mode 100644
+index 0000000..24542b9
+--- /dev/null
++++ b/crio-clearlinux.conf
+@@ -0,0 +1,3 @@
++[Unit]
++Wants=crio-set-runtime.service
++After=crio-set-runtime.service
+diff --git a/crio-set-runtime.service b/crio-set-runtime.service
+new file mode 100644
+index 0000000..b4ae91f
+--- /dev/null
++++ b/crio-set-runtime.service
+@@ -0,0 +1,6 @@
++[Unit]
++Description= Set Default Cri-o Runtime
++
++[Service]
++Type=oneshot
++ExecStart=/usr/bin/set-crio-default-runtime
+diff --git a/set-crio-default-runtime b/set-crio-default-runtime
+new file mode 100644
+index 0000000..0dd69ea
+--- /dev/null
++++ b/set-crio-default-runtime
+@@ -0,0 +1,5 @@
++#!/bin/bash
++
++sed -i 's|^\(runtime_untrusted_workload = \).*|\1"/usr/bin/kata-runtime"|' /usr/share/defaults/crio/crio.conf
++sed -i 's|^\(default_workload_trust = \).*|\1"untrusted"|' /usr/share/defaults/crio/crio.conf
++systemctl daemon-reload
+--
+2.18.0
+

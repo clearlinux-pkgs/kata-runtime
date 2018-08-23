@@ -3,3 +3,7 @@ install -m 0755 -D set-docker-default-runtime %{buildroot}/usr/bin/set-docker-de
 install -m 0644 -D clearlinux.conf %{buildroot}/usr/lib/systemd/system/docker.service.d/clearlinux.conf
 install -m 0644 -D 50-runtime.conf %{buildroot}/usr/lib/systemd/system/docker.service.d/50-runtime.conf
 install -m 0644 -D docker-set-runtime.service %{buildroot}/usr/lib/systemd/system/docker-set-runtime.service
+
+install -m 0755 -D set-crio-default-runtime %{buildroot}/usr/bin/set-crio-default-runtime
+install -m 0644 -D crio-clearlinux.conf %{buildroot}/usr/lib/systemd/system/crio.service.d/crio-clearlinux.conf
+install -m 0644 -D crio-set-runtime.service %{buildroot}/usr/lib/systemd/system/crio-set-runtime.service
