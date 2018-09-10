@@ -1,4 +1,4 @@
-From 8717de78231531244a792a3f497e2b663cd75db9 Mon Sep 17 00:00:00 2001
+From a2668ecccb0e4b892d62a9d99fb1d49e8e06072c Mon Sep 17 00:00:00 2001
 From: William Douglas <william.douglas@intel.com>
 Date: Thu, 21 Jun 2018 23:11:44 +0000
 Subject: [PATCH] Add Clear Linux docker integration for kata containers
@@ -28,7 +28,7 @@ index 0000000..e05cf06
 +Environment="DOCKER_DEFAULT_RUNTIME=--default-runtime runc"
 diff --git a/clearlinux.conf b/clearlinux.conf
 new file mode 100644
-index 0000000..6587392
+index 0000000..826895d
 --- /dev/null
 +++ b/clearlinux.conf
 @@ -0,0 +1,8 @@
@@ -37,7 +37,7 @@ index 0000000..6587392
 +After=docker-set-runtime.service
 +
 +[Service]
-+Environment="DOCKER_EXTRA_RUNTIMES=--add-runtime cc-runtime=/usr/bin/cc-runtime --add-runtime kata-runtime=/usr/bin/kata-runtime"
++Environment="DOCKER_EXTRA_RUNTIMES=--add-runtime kata-runtime=/usr/bin/kata-runtime"
 +ExecStart=
 +ExecStart=/usr/bin/dockerd $DOCKER_EXTRA_RUNTIMES $DOCKER_DEFAULT_RUNTIME --storage-driver=overlay2
 diff --git a/docker-set-runtime.service b/docker-set-runtime.service
