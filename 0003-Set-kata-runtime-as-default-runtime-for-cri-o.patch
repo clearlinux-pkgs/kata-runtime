@@ -1,4 +1,4 @@
-From 988a726889be371a75b0f2ee9eaedacdf79d2cd8 Mon Sep 17 00:00:00 2001
+From 3bdcd9a5810fa8c8f2428c275de81ba8038e63ff Mon Sep 17 00:00:00 2001
 From: Daniela Plascencia <daniela.plascencia@linux.intel.com>
 Date: Mon, 20 Aug 2018 17:23:22 -0500
 Subject: [PATCH] Set kata-runtime as default runtime for cri-o.
@@ -10,8 +10,8 @@ Signed-off-by: Daniela Plascencia <daniela.plascencia@linux.intel.com>
 ---
  crio-clearlinux.conf     | 3 +++
  crio-set-runtime.service | 8 ++++++++
- set-crio-default-runtime | 9 +++++++++
- 3 files changed, 20 insertions(+)
+ set-crio-default-runtime | 8 ++++++++
+ 3 files changed, 19 insertions(+)
  create mode 100644 crio-clearlinux.conf
  create mode 100644 crio-set-runtime.service
  create mode 100644 set-crio-default-runtime
@@ -41,19 +41,18 @@ index 0000000..b0c7709
 +ExecStart=/usr/bin/set-crio-default-runtime
 diff --git a/set-crio-default-runtime b/set-crio-default-runtime
 new file mode 100644
-index 0000000..8aa78cc
+index 0000000..5131225
 --- /dev/null
 +++ b/set-crio-default-runtime
-@@ -0,0 +1,9 @@
+@@ -0,0 +1,8 @@
 +#!/bin/bash
 +
 +mkdir -p /etc/crio/
 +cp /usr/share/defaults/crio/crio.conf /etc/crio/crio.conf
 +
 +sed -i 's|^\(runtime_untrusted_workload = \).*|\1"/usr/bin/kata-runtime"|' /etc/crio/crio.conf
-+sed -i 's|^\(default_workload_trust = \).*|\1"untrusted"|' /etc/crio/crio.conf
 +
 +systemctl daemon-reload
 -- 
-2.18.0
+2.19.0
 
