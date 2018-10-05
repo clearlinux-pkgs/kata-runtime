@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 1.3.0
-Release  : 21
+Release  : 22
 URL      : https://github.com/kata-containers/runtime/archive/1.3.0.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/1.3.0.tar.gz
 Summary  : No detailed summary available
@@ -19,6 +19,7 @@ BuildRequires : buildreq-golang
 Patch1: 0001-add-fake-autogen.patch
 Patch2: 0002-Add-Clear-Linux-Docker-integration-for-Kata-Containe.patch
 Patch3: 0003-Set-kata-runtime-as-default-runtime-for-cri-o.patch
+Patch4: 0004-Allow-extra-docker-opts-as-a-flag-to-dockerd.patch
 
 %description
 [![Build Status](https://travis-ci.org/kata-containers/runtime.svg?branch=master)](https://travis-ci.org/kata-containers/runtime)
@@ -75,13 +76,14 @@ license components for the kata-runtime package.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1538420222
+export SOURCE_DATE_EPOCH=1538708405
 %autogen --disable-static ;export GOPATH="${PWD}/gopath/" \
 ;mkdir -p "${GOPATH}/src/github.com/kata-containers/" \
 ;ln -sf "${PWD}" "${GOPATH}/src/github.com/kata-containers/runtime" \
@@ -89,7 +91,7 @@ export SOURCE_DATE_EPOCH=1538420222
 make  %{?_smp_mflags} PREFIX=/usr/ DESTDIR=%{buildroot} QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
 
 %install
-export SOURCE_DATE_EPOCH=1538420222
+export SOURCE_DATE_EPOCH=1538708405
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/kata-runtime
 cp LICENSE %{buildroot}/usr/share/package-licenses/kata-runtime/LICENSE
@@ -179,7 +181,7 @@ install -m 0644 -D crio-set-runtime.service %{buildroot}/usr/lib/systemd/system/
 /usr/libexec/kata-containers/kata-netmon
 
 %files license
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/package-licenses/kata-runtime/LICENSE
 /usr/share/package-licenses/kata-runtime/vendor_github.com_BurntSushi_toml_COPYING
 /usr/share/package-licenses/kata-runtime/vendor_github.com_BurntSushi_toml_cmd_toml-test-decoder_COPYING

@@ -1,0 +1,23 @@
+From 85402d8c8e985bbeb12690962a8dd96355dd4083 Mon Sep 17 00:00:00 2001
+From: Ganesh Maharaj Mahalingam <ganesh.mahalingam@intel.com>
+Date: Fri, 5 Oct 2018 02:27:28 +0000
+Subject: [PATCH 4/4] Allow extra docker opts as a flag to dockerd
+
+Signed-off-by: Ganesh Maharaj Mahalingam <ganesh.mahalingam@intel.com>
+---
+ clearlinux.conf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/clearlinux.conf b/clearlinux.conf
+index 826895d..bd088e7 100644
+--- a/clearlinux.conf
++++ b/clearlinux.conf
+@@ -5,4 +5,4 @@ After=docker-set-runtime.service
+ [Service]
+ Environment="DOCKER_EXTRA_RUNTIMES=--add-runtime kata-runtime=/usr/bin/kata-runtime"
+ ExecStart=
+-ExecStart=/usr/bin/dockerd $DOCKER_EXTRA_RUNTIMES $DOCKER_DEFAULT_RUNTIME --storage-driver=overlay2
++ExecStart=/usr/bin/dockerd $DOCKER_EXTRA_RUNTIMES $DOCKER_DEFAULT_RUNTIME $DOCKER_EXTRA_OPTS --storage-driver=overlay2
+-- 
+2.19.0
+

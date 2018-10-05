@@ -1,3 +1,4 @@
 0001-add-fake-autogen.patch
 0002-Add-Clear-Linux-Docker-integration-for-Kata-Containe.patch
 0003-Set-kata-runtime-as-default-runtime-for-cri-o.patch
+0004-Allow-extra-docker-opts-as-a-flag-to-dockerd.patch
