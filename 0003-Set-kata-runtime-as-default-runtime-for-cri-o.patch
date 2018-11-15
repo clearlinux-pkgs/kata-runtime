@@ -1,4 +1,4 @@
-From 3bdcd9a5810fa8c8f2428c275de81ba8038e63ff Mon Sep 17 00:00:00 2001
+From c644e7ae48fc1aaa32b887df2d27d91fb9fbad5d Mon Sep 17 00:00:00 2001
 From: Daniela Plascencia <daniela.plascencia@linux.intel.com>
 Date: Mon, 20 Aug 2018 17:23:22 -0500
 Subject: [PATCH] Set kata-runtime as default runtime for cri-o.
@@ -8,10 +8,10 @@ automatically when Kata Containers is installed on a Clear Linux system.
 
 Signed-off-by: Daniela Plascencia <daniela.plascencia@linux.intel.com>
 ---
- crio-clearlinux.conf     | 3 +++
- crio-set-runtime.service | 8 ++++++++
- set-crio-default-runtime | 8 ++++++++
- 3 files changed, 19 insertions(+)
+ crio-clearlinux.conf     |  3 +++
+ crio-set-runtime.service |  8 ++++++++
+ set-crio-default-runtime | 10 ++++++++++
+ 3 files changed, 21 insertions(+)
  create mode 100644 crio-clearlinux.conf
  create mode 100644 crio-set-runtime.service
  create mode 100644 set-crio-default-runtime
@@ -41,10 +41,10 @@ index 0000000..b0c7709
 +ExecStart=/usr/bin/set-crio-default-runtime
 diff --git a/set-crio-default-runtime b/set-crio-default-runtime
 new file mode 100644
-index 0000000..5131225
+index 0000000..054a47e
 --- /dev/null
 +++ b/set-crio-default-runtime
-@@ -0,0 +1,8 @@
+@@ -0,0 +1,10 @@
 +#!/bin/bash
 +
 +mkdir -p /etc/crio/
@@ -52,7 +52,9 @@ index 0000000..5131225
 +
 +sed -i 's|^\(runtime_untrusted_workload = \).*|\1"/usr/bin/kata-runtime"|' /etc/crio/crio.conf
 +
++sed -i 's|\(\[crio\.runtime\]\)|\1\nmanage_network_ns_lifecycle = true|' /etc/crio/crio.conf
++
 +systemctl daemon-reload
 -- 
-2.19.0
+2.19.1
 
