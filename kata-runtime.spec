@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 1.3.1
-Release  : 24
+Release  : 25
 URL      : https://github.com/kata-containers/runtime/archive/1.3.1.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/1.3.1.tar.gz
 Summary  : No detailed summary available
@@ -84,7 +84,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1542312482
+export SOURCE_DATE_EPOCH=1542740810
 %autogen --disable-static ;export GOPATH="${PWD}/gopath/" \
 ;mkdir -p "${GOPATH}/src/github.com/kata-containers/" \
 ;ln -sf "${PWD}" "${GOPATH}/src/github.com/kata-containers/runtime" \
@@ -92,7 +92,7 @@ export SOURCE_DATE_EPOCH=1542312482
 make  %{?_smp_mflags} PREFIX=/usr/ DESTDIR=%{buildroot} QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
 
 %install
-export SOURCE_DATE_EPOCH=1542312482
+export SOURCE_DATE_EPOCH=1542740810
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/kata-runtime
 cp LICENSE %{buildroot}/usr/share/package-licenses/kata-runtime/LICENSE
