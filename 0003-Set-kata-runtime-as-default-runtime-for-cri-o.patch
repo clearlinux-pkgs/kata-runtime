@@ -1,4 +1,4 @@
-From 83d54be0632f844a834385e4d2517aabdfb9cb6c Mon Sep 17 00:00:00 2001
+From fbfa302dc3a0c9c2edcde16aeb7ed3dcbe3694ec Mon Sep 17 00:00:00 2001
 From: Daniela Plascencia <daniela.plascencia@linux.intel.com>
 Date: Mon, 20 Aug 2018 17:23:22 -0500
 Subject: [PATCH] Set kata-runtime as default runtime for cri-o.
@@ -41,7 +41,7 @@ index 0000000..b0c7709
 +ExecStart=/usr/bin/set-crio-default-runtime
 diff --git a/set-crio-default-runtime b/set-crio-default-runtime
 new file mode 100644
-index 0000000..e8ea8e8
+index 0000000..e63f4ce
 --- /dev/null
 +++ b/set-crio-default-runtime
 @@ -0,0 +1,14 @@
@@ -52,7 +52,7 @@ index 0000000..e8ea8e8
 +
 +cp /usr/share/defaults/crio/crio.conf /etc/crio/crio.conf
 +
-+sed -i 's|^\(runtime_untrusted_workload = \).*|\1"/usr/bin/kata-runtime"|' /etc/crio/crio.conf
++echo -e "\n[crio.runtime.runtimes.kata]\nruntime_path = \"/usr/bin/kata-runtime\"" >> /etc/crio/crio.conf
 +
 +sed -i 's|\(\[crio\.runtime\]\)|\1\nmanage_network_ns_lifecycle = true|' /etc/crio/crio.conf
 +
