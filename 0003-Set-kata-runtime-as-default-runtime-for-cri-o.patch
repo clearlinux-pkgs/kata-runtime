@@ -1,7 +1,7 @@
-From fbfa302dc3a0c9c2edcde16aeb7ed3dcbe3694ec Mon Sep 17 00:00:00 2001
+From 9da17f7eecce52bb4cd22d1eda76c0b65c7e821b Mon Sep 17 00:00:00 2001
 From: Daniela Plascencia <daniela.plascencia@linux.intel.com>
 Date: Mon, 20 Aug 2018 17:23:22 -0500
-Subject: [PATCH] Set kata-runtime as default runtime for cri-o.
+Subject: [PATCH 3/3] Set kata-runtime as default runtime for cri-o.
 
 As it was done for Docker, the runtime configuration for cri-o will be done
 automatically when Kata Containers is installed on a Clear Linux system.
@@ -10,8 +10,8 @@ Signed-off-by: Daniela Plascencia <daniela.plascencia@linux.intel.com>
 ---
  crio-clearlinux.conf     |  3 +++
  crio-set-runtime.service |  8 ++++++++
- set-crio-default-runtime | 14 ++++++++++++++
- 3 files changed, 25 insertions(+)
+ set-crio-default-runtime | 11 +++++++++++
+ 3 files changed, 22 insertions(+)
  create mode 100644 crio-clearlinux.conf
  create mode 100644 crio-set-runtime.service
  create mode 100644 set-crio-default-runtime
@@ -41,22 +41,19 @@ index 0000000..b0c7709
 +ExecStart=/usr/bin/set-crio-default-runtime
 diff --git a/set-crio-default-runtime b/set-crio-default-runtime
 new file mode 100644
-index 0000000..e63f4ce
+index 0000000..040c206
 --- /dev/null
 +++ b/set-crio-default-runtime
-@@ -0,0 +1,14 @@
+@@ -0,0 +1,11 @@
 +#!/bin/bash
 +
 +mkdir -p /etc/crio/
-+mkdir -p /opt/cni/bin/
 +
 +cp /usr/share/defaults/crio/crio.conf /etc/crio/crio.conf
 +
 +echo -e "\n[crio.runtime.runtimes.kata]\nruntime_path = \"/usr/bin/kata-runtime\"" >> /etc/crio/crio.conf
 +
 +sed -i 's|\(\[crio\.runtime\]\)|\1\nmanage_network_ns_lifecycle = true|' /etc/crio/crio.conf
-+
-+sed -i 's|/usr/libexec/cni/|/opt/cni/bin/|' /etc/crio/crio.conf
 +
 +systemctl daemon-reload
 -- 
