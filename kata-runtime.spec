@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 1.5.0.rc2
-Release  : 28
+Release  : 29
 URL      : https://github.com/kata-containers/runtime/archive/1.5.0-rc2.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/1.5.0-rc2.tar.gz
 Summary  : No detailed summary available
@@ -16,7 +16,6 @@ Requires: kata-runtime-libexec = %{version}-%{release}
 Requires: kata-runtime-license = %{version}-%{release}
 Requires: kata-runtime-services = %{version}-%{release}
 BuildRequires : buildreq-golang
-BuildRequires : yq
 Patch1: 0001-add-fake-autogen.patch
 Patch2: 0002-Add-Clear-Linux-Docker-integration-for-Kata-Containe.patch
 Patch3: 0003-Set-kata-runtime-as-default-runtime-for-cri-o.patch
@@ -87,7 +86,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1545451847
+export SOURCE_DATE_EPOCH=1545458099
 %autogen --disable-static ;export GOPATH="${PWD}/gopath/" \
 ;mkdir -p "${GOPATH}/src/github.com/kata-containers/" \
 ;ln -sf "${PWD}" "${GOPATH}/src/github.com/kata-containers/runtime" \
@@ -95,7 +94,7 @@ export SOURCE_DATE_EPOCH=1545451847
 make  %{?_smp_mflags} PREFIX=/usr/ DESTDIR=%{buildroot} QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
 
 %install
-export SOURCE_DATE_EPOCH=1545451847
+export SOURCE_DATE_EPOCH=1545458099
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/kata-runtime
 cp LICENSE %{buildroot}/usr/share/package-licenses/kata-runtime/LICENSE
