@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 1.5.0.rc2
-Release  : 29
+Release  : 30
 URL      : https://github.com/kata-containers/runtime/archive/1.5.0-rc2.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/1.5.0-rc2.tar.gz
 Summary  : No detailed summary available
@@ -21,6 +21,7 @@ Patch2: 0002-Add-Clear-Linux-Docker-integration-for-Kata-Containe.patch
 Patch3: 0003-Set-kata-runtime-as-default-runtime-for-cri-o.patch
 Patch4: 0004-Allow-extra-docker-opts-as-a-flag-to-dockerd.patch
 Patch5: 0005-Remove-golang-version-check.patch
+Patch6: PR1077.patch
 
 %description
 [![Build Status](https://travis-ci.org/kata-containers/runtime.svg?branch=master)](https://travis-ci.org/kata-containers/runtime)
@@ -80,13 +81,14 @@ services components for the kata-runtime package.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1545458099
+export SOURCE_DATE_EPOCH=1545931994
 %autogen --disable-static ;export GOPATH="${PWD}/gopath/" \
 ;mkdir -p "${GOPATH}/src/github.com/kata-containers/" \
 ;ln -sf "${PWD}" "${GOPATH}/src/github.com/kata-containers/runtime" \
@@ -94,7 +96,7 @@ export SOURCE_DATE_EPOCH=1545458099
 make  %{?_smp_mflags} PREFIX=/usr/ DESTDIR=%{buildroot} QEMUPATH=/usr/bin/kata-qemu-lite-system-x86_64
 
 %install
-export SOURCE_DATE_EPOCH=1545458099
+export SOURCE_DATE_EPOCH=1545931994
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/kata-runtime
 cp LICENSE %{buildroot}/usr/share/package-licenses/kata-runtime/LICENSE
