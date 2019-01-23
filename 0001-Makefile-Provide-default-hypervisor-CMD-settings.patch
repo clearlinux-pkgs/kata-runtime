@@ -1,0 +1,149 @@
+From 80b0c67835197c7aed76b0f9dbb22f16d5cc18a3 Mon Sep 17 00:00:00 2001
+From: William Douglas <william.douglas@intel.com>
+Date: Wed, 23 Jan 2019 11:27:54 -0800
+Subject: [PATCH 1/2] Makefile: Provide default hypervisor CMD settings
+
+As arch detection isn't being done and KNOWN_HYPERVISORS was only
+being populated via environment variable settings (and is a runtime
+rather than build time dependency anyway) just provide a set of
+defaults that can be overridden as needed at build time.
+
+This will also cause any hypervisor configuration to always be
+installed.
+---
+ Makefile | 82 +++++++++++++++++++++-----------------------------------
+ 1 file changed, 31 insertions(+), 51 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 1c11f74..68c6499 100644
+--- a/Makefile
++++ b/Makefile
+@@ -84,6 +84,10 @@ FCBINDIR      := $(PREFIXDEPS)/bin
+ SYSCONFDIR    := /etc
+ LOCALSTATEDIR := /var
+ 
++# default CMD names if not
++QEMUCMD       ?= kata-qemu-lite-system-x86_64
++FCCMD         ?= firecracker
++
+ ifeq (,$(installing))
+     # Force a rebuild to ensure version details are correct
+     # (but only for a non-install build phase).
+@@ -187,66 +191,47 @@ CONFIGS =
+ CONFIG_PATHS = 
+ SYSCONFIG_PATHS =
+ 
+-# List of hypervisors known for the current architecture
+-KNOWN_HYPERVISORS =
+-
+-ifneq (,$(QEMUCMD))
+-    KNOWN_HYPERVISORS += $(HYPERVISOR_QEMU)
+-
+-    CONFIG_FILE_QEMU = configuration-qemu.toml
+-    CONFIG_QEMU = $(CLI_DIR)/config/$(CONFIG_FILE_QEMU)
+-    CONFIG_QEMU_IN = $(CONFIG_QEMU).in
++CONFIG_FILE_QEMU = configuration-qemu.toml
++CONFIG_QEMU = $(CLI_DIR)/config/$(CONFIG_FILE_QEMU)
++CONFIG_QEMU_IN = $(CONFIG_QEMU).in
+ 
+-    CONFIG_PATH_QEMU = $(abspath $(CONFDIR)/$(CONFIG_FILE_QEMU))
+-    CONFIG_PATHS += $(CONFIG_PATH_QEMU)
++CONFIG_PATH_QEMU = $(abspath $(CONFDIR)/$(CONFIG_FILE_QEMU))
++CONFIG_PATHS += $(CONFIG_PATH_QEMU)
+ 
+-    SYSCONFIG_QEMU = $(abspath $(SYSCONFDIR)/$(CONFIG_FILE_QEMU))
+-    SYSCONFIG_PATHS += $(SYSCONFIG_QEMU)
+-
+-    CONFIGS += $(CONFIG_QEMU)
+-
+-    # qemu-specific options (all should be suffixed by "_QEMU")
+-    DEFBLOCKSTORAGEDRIVER_QEMU := virtio-scsi
+-    DEFNETWORKMODEL_QEMU := macvtap
+-    KERNELNAME_QEMU = $(call MAKE_KERNEL_NAME,$(KERNELTYPE))
+-    KERNELPATH_QEMU = $(KERNELDIR)/$(KERNELNAME_QEMU)
+-endif
++SYSCONFIG_QEMU = $(abspath $(SYSCONFDIR)/$(CONFIG_FILE_QEMU))
++SYSCONFIG_PATHS += $(SYSCONFIG_QEMU)
+ 
+-ifneq (,$(FCCMD))
+-    KNOWN_HYPERVISORS += $(HYPERVISOR_FC)
++CONFIGS += $(CONFIG_QEMU)
+ 
+-    CONFIG_FILE_FC = configuration-fc.toml
+-    CONFIG_FC = $(CLI_DIR)/config/$(CONFIG_FILE_FC)
+-    CONFIG_FC_IN = $(CONFIG_FC).in
++# qemu-specific options (all should be suffixed by "_QEMU")
++DEFBLOCKSTORAGEDRIVER_QEMU := virtio-scsi
++DEFNETWORKMODEL_QEMU := macvtap
++KERNELNAME_QEMU = $(call MAKE_KERNEL_NAME,$(KERNELTYPE))
++KERNELPATH_QEMU = $(KERNELDIR)/$(KERNELNAME_QEMU)
+ 
+-    CONFIG_PATH_FC = $(abspath $(CONFDIR)/$(CONFIG_FILE_FC))
+-    CONFIG_PATHS += $(CONFIG_PATH_FC)
++CONFIG_FILE_FC = configuration-fc.toml
++CONFIG_FC = $(CLI_DIR)/config/$(CONFIG_FILE_FC)
++CONFIG_FC_IN = $(CONFIG_FC).in
+ 
+-    SYSCONFIG_FC = $(abspath $(SYSCONFDIR)/$(CONFIG_FILE_FC))
+-    SYSCONFIG_PATHS += $(SYSCONFIG_FC)
++CONFIG_PATH_FC = $(abspath $(CONFDIR)/$(CONFIG_FILE_FC))
++CONFIG_PATHS += $(CONFIG_PATH_FC)
+ 
+-    CONFIGS += $(CONFIG_FC)
++SYSCONFIG_FC = $(abspath $(SYSCONFDIR)/$(CONFIG_FILE_FC))
++SYSCONFIG_PATHS += $(SYSCONFIG_FC)
+ 
+-    # firecracker-specific options (all should be suffixed by "_FC")
+-    DEFBLOCKSTORAGEDRIVER_FC := virtio-mmio
+-    DEFNETWORKMODEL_FC := tcfilter
+-    KERNELTYPE_FC = uncompressed
+-    KERNEL_NAME_FC = $(call MAKE_KERNEL_NAME,$(KERNELTYPE_FC))
+-    KERNELPATH_FC = $(KERNELDIR)/$(KERNEL_NAME_FC)
+-endif
++CONFIGS += $(CONFIG_FC)
+ 
+-ifeq (,$(KNOWN_HYPERVISORS))
+-    $(error "ERROR: No hypervisors known for architecture $(ARCH) (looked for: $(HYPERVISORS))")
+-endif
++# firecracker-specific options (all should be suffixed by "_FC")
++DEFBLOCKSTORAGEDRIVER_FC := virtio-mmio
++DEFNETWORKMODEL_FC := tcfilter
++KERNELTYPE_FC = uncompressed
++KERNEL_NAME_FC = $(call MAKE_KERNEL_NAME,$(KERNELTYPE_FC))
++KERNELPATH_FC = $(KERNELDIR)/$(KERNEL_NAME_FC)
+ 
+ ifeq (,$(findstring $(DEFAULT_HYPERVISOR),$(HYPERVISORS)))
+     $(error "ERROR: Invalid default hypervisor: '$(DEFAULT_HYPERVISOR)'")
+ endif
+ 
+-ifeq (,$(findstring $(DEFAULT_HYPERVISOR),$(KNOWN_HYPERVISORS)))
+-    $(error "ERROR: Default hypervisor '$(DEFAULT_HYPERVISOR)' not known for architecture $(ARCH)")
+-endif
+-
+ ifeq ($(DEFAULT_HYPERVISOR),$(HYPERVISOR_QEMU))
+     DEFAULT_HYPERVISOR_CONFIG_PATH = $(CONFIG_PATH_QEMU)
+ endif
+@@ -618,7 +603,6 @@ endif
+ 	@printf "\n"
+ 	@printf "• hypervisors:\n"
+ 	@printf "\tKnown: $(sort $(HYPERVISORS))\n"
+-	@printf "\tAvailable for this architecture: $(sort $(KNOWN_HYPERVISORS))\n"
+ 	@printf "\n"
+ 	@printf "• Summary:\n"
+ 	@printf "\n"
+@@ -645,12 +629,8 @@ endif
+ 
+ 	@printf "\tdefault install path for $(DEFAULT_HYPERVISOR) (CONFIG_PATH) : %s\n" $(abspath $(CONFIG_PATH))
+ 	@printf "\tdefault alternate config path (SYSCONFIG) : %s\n" $(abspath $(SYSCONFIG))
+-ifneq (,$(findstring $(HYPERVISOR_QEMU),$(KNOWN_HYPERVISORS)))
+ 	@printf "\t$(HYPERVISOR_QEMU) hypervisor path (QEMUPATH) : %s\n" $(abspath $(QEMUPATH))
+-endif
+-ifneq (,$(findstring $(HYPERVISOR_FC),$(KNOWN_HYPERVISORS)))
+ 	@printf "\t$(HYPERVISOR_FC) hypervisor path (FCPATH) : %s\n" $(abspath $(FCPATH))
+-endif
+ 	@printf "\tassets path (PKGDATADIR) : %s\n" $(abspath $(PKGDATADIR))
+ 	@printf "\tproxy+shim path (PKGLIBEXECDIR) : %s\n" $(abspath $(PKGLIBEXECDIR))
+ 	@printf "\n"
+-- 
+2.20.0
+

@@ -1,0 +1,45 @@
+From 21d4801a4fc8f22ffb5d567e27b55bca79f8200d Mon Sep 17 00:00:00 2001
+From: Jose Carlos Venegas Munoz <jose.carlos.venegas.munoz@intel.com>
+Date: Wed, 23 Jan 2019 00:27:55 -0600
+Subject: [PATCH 2/2] makefile: honor DESDIR on install
+
+- Do symlink to a relative path to hypervisor config.
+- Create symlink on DESTDIR
+
+Fixes: #1161
+
+Signed-off-by: Jose Carlos Venegas Munoz <jose.carlos.venegas.munoz@intel.com>
+---
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 68c6499..ea1a78a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -233,11 +233,11 @@ ifeq (,$(findstring $(DEFAULT_HYPERVISOR),$(HYPERVISORS)))
+ endif
+ 
+ ifeq ($(DEFAULT_HYPERVISOR),$(HYPERVISOR_QEMU))
+-    DEFAULT_HYPERVISOR_CONFIG_PATH = $(CONFIG_PATH_QEMU)
++    DEFAULT_HYPERVISOR_CONFIG = $(CONFIG_FILE_QEMU)
+ endif
+ 
+ ifeq ($(DEFAULT_HYPERVISOR),$(HYPERVISOR_FC))
+-    DEFAULT_HYPERVISOR_CONFIG_PATH = $(CONFIG_PATH_FC)
++    DEFAULT_HYPERVISOR_CONFIG = $(CONFIG_FILE_FC)
+ endif
+ 
+ CONFDIR := $(DEFAULTSDIR)/$(PROJECT_DIR)
+@@ -531,7 +531,7 @@ install-bin-libexec: $(BINLIBEXECLIST)
+ 
+ install-configs: $(CONFIGS)
+ 	$(QUIET_INST)$(foreach f,$(CONFIGS),$(call INSTALL_CONFIG,$f,$(dir $(CONFIG_PATH))))
+-	$(QUIET_INST)ln -sf $(DEFAULT_HYPERVISOR_CONFIG_PATH) $(CONFIG_PATH)
++	$(QUIET_INST)ln -sf $(DEFAULT_HYPERVISOR_CONFIG) $(DESTDIR)/$(CONFIG_PATH)
+ 
+ install-scripts: $(SCRIPTS)
+ 	$(QUIET_INST)$(foreach f,$(SCRIPTS),$(call INSTALL_EXEC,$f,$(SCRIPTS_DIR)))
+-- 
+2.20.0
+
