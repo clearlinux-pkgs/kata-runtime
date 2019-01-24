@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 1.5.0
-Release  : 35
+Release  : 41
 URL      : https://github.com/kata-containers/runtime/archive/1.5.0.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/1.5.0.tar.gz
 Summary  : No detailed summary available
@@ -16,11 +16,11 @@ Requires: kata-runtime-libexec = %{version}-%{release}
 Requires: kata-runtime-license = %{version}-%{release}
 Requires: kata-runtime-services = %{version}-%{release}
 BuildRequires : buildreq-golang
-Patch1: 0001-Makefile-Provide-default-hypervisor-CMD-settings.patch
-Patch2: 0002-Add-Clear-Linux-Docker-integration-for-Kata-Containe.patch
-Patch3: 0003-Set-kata-runtime-as-default-runtime-for-cri-o.patch
-Patch4: 0004-Allow-extra-docker-opts-as-a-flag-to-dockerd.patch
-Patch5: 0005-makefile-honor-DESDIR-on-install.patch
+Patch1: 0001-Add-Clear-Linux-Docker-integration-for-Kata-Containe.patch
+Patch2: 0002-Set-kata-runtime-as-default-runtime-for-cri-o.patch
+Patch3: 0003-Allow-extra-docker-opts-as-a-flag-to-dockerd.patch
+Patch4: 0004-makefile-honor-DESDIR-on-install.patch
+Patch5: 0005-Makefile-Set-arch-regardless-of-GOPATH-state.patch
 
 %description
 [![Build Status](https://travis-ci.org/kata-containers/runtime.svg?branch=master)](https://travis-ci.org/kata-containers/runtime)
@@ -92,12 +92,12 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1548276323
-make  %{?_smp_mflags} SKIP_GO_VERSION_CHECK=y
+export SOURCE_DATE_EPOCH=1548360155
+make  %{?_smp_mflags} SKIP_GO_VERSION_CHECK=y QEMUCMD=kata-qemu-lite-system-x86_64
 
 
 %install
-export SOURCE_DATE_EPOCH=1548276323
+export SOURCE_DATE_EPOCH=1548360155
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/kata-runtime
 cp LICENSE %{buildroot}/usr/share/package-licenses/kata-runtime/LICENSE
@@ -187,7 +187,7 @@ cp virtcontainers/LICENSE %{buildroot}/usr/share/package-licenses/kata-runtime/v
 cp virtcontainers/pkg/oci/LICENSE %{buildroot}/usr/share/package-licenses/kata-runtime/virtcontainers_pkg_oci_LICENSE
 %make_install SKIP_GO_VERSION_CHECK=y GOPATH="${PWD}/gopath/" PREFIX=/usr/
 ## install_append content
-sed -i -e '/^initrd =/d' %{buildroot}/usr/share/defaults/kata-containers/configuration.toml
+sed -i -e '/^initrd =/d' %{buildroot}/usr/share/defaults/kata-containers/configuration-qemu.toml
 install -m 0755 -D set-docker-default-runtime %{buildroot}/usr/bin/set-docker-default-runtime
 install -m 0644 -D clearlinux.conf %{buildroot}/usr/lib/systemd/system/docker.service.d/clearlinux.conf
 install -m 0644 -D 50-runtime.conf %{buildroot}/usr/lib/systemd/system/docker.service.d/50-runtime.conf
