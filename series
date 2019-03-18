@@ -1,5 +1,3 @@
 0001-Add-Clear-Linux-Docker-integration-for-Kata-Containe.patch
 0002-Set-kata-runtime-as-default-runtime-for-cri-o.patch
 0003-Allow-extra-docker-opts-as-a-flag-to-dockerd.patch
-0004-makefile-honor-DESDIR-on-install.patch
-0005-Makefile-Set-arch-regardless-of-GOPATH-state.patch
