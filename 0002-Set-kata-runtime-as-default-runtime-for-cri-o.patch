@@ -44,7 +44,7 @@ new file mode 100644
 index 0000000..040c206
 --- /dev/null
 +++ b/set-crio-default-runtime
-@@ -0,0 +1,11 @@
+@@ -0,0 +1,16 @@
 +#!/bin/bash
 +
 +mkdir -p /etc/crio/
@@ -53,7 +53,12 @@ index 0000000..040c206
 +
 +echo -e "\n[crio.runtime.runtimes.kata]\nruntime_path = \"/usr/bin/kata-runtime\"" >> /etc/crio/crio.conf
 +
-+sed -i 's|\(\[crio\.runtime\]\)|\1\nmanage_network_ns_lifecycle = true|' /etc/crio/crio.conf
++if [ ! $(grep -Fxq "manage_network_ns_lifecycle = false" /etc/crio/crio.conf) ]
++then
++    sed -i 's/manage_network_ns_lifecycle = false/manage_network_ns_lifecycle = true/' /etc/crio/crio.conf
++else
++    sed -i 's|\(\[crio\.runtime\]\)|\1\nmanage_network_ns_lifecycle = true|' /etc/crio/crio.conf
++fi
 +
 +systemctl daemon-reload
 -- 

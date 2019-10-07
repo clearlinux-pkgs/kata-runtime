@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 1.8.2
-Release  : 46
+Release  : 47
 URL      : https://github.com/kata-containers/runtime/archive/1.8.2/runtime-1.8.2.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/1.8.2/runtime-1.8.2.tar.gz
 Summary  : No detailed summary available
@@ -86,7 +86,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1570469884
+export SOURCE_DATE_EPOCH=1570488315
 export GCC_IGNORE_WERROR=1
 export GOPROXY=file:///usr/share/goproxy
 export CFLAGS="$CFLAGS -fno-lto "
@@ -97,7 +97,7 @@ make  %{?_smp_mflags}  SKIP_GO_VERSION_CHECK=y QEMUCMD=kata-qemu-lite-system-x86
 
 
 %install
-export SOURCE_DATE_EPOCH=1570469884
+export SOURCE_DATE_EPOCH=1570488315
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/kata-runtime
 cp LICENSE %{buildroot}/usr/share/package-licenses/kata-runtime/LICENSE
