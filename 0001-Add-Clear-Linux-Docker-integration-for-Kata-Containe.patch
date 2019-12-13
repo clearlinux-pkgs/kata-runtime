@@ -10,13 +10,9 @@ Signed-off-by: Daniela Plascencia <daniela.plascencia@linux.intel.com>
 ---
  50-runtime.conf            | 2 ++
  clearlinux.conf            | 8 ++++++++
- docker-set-runtime.service | 8 ++++++++
- set-docker-default-runtime | 5 +++++
- 4 files changed, 23 insertions(+)
+ 2 files changed, 4 insertions(+)
  create mode 100644 50-runtime.conf
  create mode 100644 clearlinux.conf
- create mode 100644 docker-set-runtime.service
- create mode 100755 set-docker-default-runtime
 
 diff --git a/50-runtime.conf b/50-runtime.conf
 new file mode 100644
@@ -31,40 +27,8 @@ new file mode 100644
 index 0000000..826895d
 --- /dev/null
 +++ b/clearlinux.conf
-@@ -0,0 +1,8 @@
-+[Unit]
-+Wants=docker-set-runtime.service
-+After=docker-set-runtime.service
-+
+@@ -0,0 +1,4 @@
 +[Service]
 +Environment="DOCKER_EXTRA_RUNTIMES=--add-runtime kata-runtime=/usr/bin/kata-runtime"
 +ExecStart=
 +ExecStart=/usr/bin/dockerd $DOCKER_EXTRA_RUNTIMES $DOCKER_DEFAULT_RUNTIME --storage-driver=overlay2
-diff --git a/docker-set-runtime.service b/docker-set-runtime.service
-new file mode 100644
-index 0000000..0cc4fdd
---- /dev/null
-+++ b/docker-set-runtime.service
-@@ -0,0 +1,8 @@
-+[Unit]
-+Description=Set Default Docker Runtime
-+ConditionPathExists=!/etc/systemd/system/docker.service.d/50-runtime.conf
-+ConditionPathExists=/dev/kvm
-+
-+[Service]
-+Type=oneshot
-+ExecStart=/usr/bin/set-docker-default-runtime
-diff --git a/set-docker-default-runtime b/set-docker-default-runtime
-new file mode 100755
-index 0000000..970522e
---- /dev/null
-+++ b/set-docker-default-runtime
-@@ -0,0 +1,5 @@
-+#!/bin/bash
-+
-+mkdir -p /etc/systemd/system/docker.service.d/
-+echo -e '[Service]\nEnvironment="DOCKER_DEFAULT_RUNTIME=--default-runtime kata-runtime"' > /etc/systemd/system/docker.service.d/50-runtime.conf
-+systemctl daemon-reload
--- 
-2.18.0
-

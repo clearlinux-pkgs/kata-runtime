@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 1.9.1
-Release  : 48
+Release  : 49
 URL      : https://github.com/kata-containers/runtime/archive/1.9.1/runtime-1.9.1.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/1.9.1/runtime-1.9.1.tar.gz
 Summary  : No detailed summary available
@@ -88,7 +88,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1573160449
+export SOURCE_DATE_EPOCH=1576254798
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$CFLAGS -fno-lto "
@@ -98,7 +98,7 @@ make  %{?_smp_mflags}  SKIP_GO_VERSION_CHECK=y QEMUCMD=kata-qemu-lite-system-x86
 
 
 %install
-export SOURCE_DATE_EPOCH=1573160449
+export SOURCE_DATE_EPOCH=1576254798
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/kata-runtime
 cp %{_builddir}/runtime-1.9.1/LICENSE %{buildroot}/usr/share/package-licenses/kata-runtime/7df059597099bb7dcf25d2a9aedfaf4465f72d8d
@@ -191,10 +191,9 @@ cp %{_builddir}/runtime-1.9.1/virtcontainers/pkg/oci/LICENSE %{buildroot}/usr/sh
 %make_install SKIP_GO_VERSION_CHECK=y GOPATH="${PWD}/gopath/" PREFIX=/usr/
 ## install_append content
 sed -i -e '/^initrd =/d' %{buildroot}/usr/share/defaults/kata-containers/configuration-qemu.toml
-install -m 0755 -D set-docker-default-runtime %{buildroot}/usr/bin/set-docker-default-runtime
 install -m 0644 -D clearlinux.conf %{buildroot}/usr/lib/systemd/system/docker.service.d/clearlinux.conf
 install -m 0644 -D 50-runtime.conf %{buildroot}/usr/lib/systemd/system/docker.service.d/50-runtime.conf
-install -m 0644 -D docker-set-runtime.service %{buildroot}/usr/lib/systemd/system/docker-set-runtime.service
+
 install -m 0755 -D set-crio-default-runtime %{buildroot}/usr/bin/set-crio-default-runtime
 install -m 0644 -D crio-clearlinux.conf %{buildroot}/usr/lib/systemd/system/crio.service.d/crio-clearlinux.conf
 install -m 0644 -D crio-set-runtime.service %{buildroot}/usr/lib/systemd/system/crio-set-runtime.service
@@ -209,7 +208,6 @@ install -m 0644 -D crio-set-runtime.service %{buildroot}/usr/lib/systemd/system/
 /usr/bin/kata-collect-data.sh
 /usr/bin/kata-runtime
 /usr/bin/set-crio-default-runtime
-/usr/bin/set-docker-default-runtime
 
 %files data
 %defattr(-,root,root,-)
@@ -277,6 +275,5 @@ install -m 0644 -D crio-set-runtime.service %{buildroot}/usr/lib/systemd/system/
 %defattr(-,root,root,-)
 /usr/lib/systemd/system/crio-set-runtime.service
 /usr/lib/systemd/system/crio.service.d/crio-clearlinux.conf
-/usr/lib/systemd/system/docker-set-runtime.service
 /usr/lib/systemd/system/docker.service.d/50-runtime.conf
 /usr/lib/systemd/system/docker.service.d/clearlinux.conf
