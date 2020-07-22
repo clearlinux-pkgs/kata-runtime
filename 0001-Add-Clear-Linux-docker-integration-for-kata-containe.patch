@@ -1,4 +1,4 @@
-From a2668ecccb0e4b892d62a9d99fb1d49e8e06072c Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: William Douglas <william.douglas@intel.com>
 Date: Thu, 21 Jun 2018 23:11:44 +0000
 Subject: [PATCH] Add Clear Linux docker integration for kata containers
@@ -8,9 +8,9 @@ the default.
 
 Signed-off-by: Daniela Plascencia <daniela.plascencia@linux.intel.com>
 ---
- 50-runtime.conf            | 2 ++
- clearlinux.conf            | 8 ++++++++
- 2 files changed, 4 insertions(+)
+ 50-runtime.conf | 2 ++
+ clearlinux.conf | 4 ++++
+ 2 files changed, 6 insertions(+)
  create mode 100644 50-runtime.conf
  create mode 100644 clearlinux.conf
 
@@ -24,7 +24,7 @@ index 0000000..e05cf06
 +Environment="DOCKER_DEFAULT_RUNTIME=--default-runtime runc"
 diff --git a/clearlinux.conf b/clearlinux.conf
 new file mode 100644
-index 0000000..826895d
+index 0000000..c3a549a
 --- /dev/null
 +++ b/clearlinux.conf
 @@ -0,0 +1,4 @@

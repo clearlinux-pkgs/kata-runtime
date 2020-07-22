@@ -1,3 +1,4 @@
-0001-Add-Clear-Linux-Docker-integration-for-Kata-Containe.patch
+0001-Add-Clear-Linux-docker-integration-for-kata-containe.patch
 0002-Set-kata-runtime-as-default-runtime-for-cri-o.patch
 0003-Allow-extra-docker-opts-as-a-flag-to-dockerd.patch
+0004-Enable-static-PIE-build-for-shim.patch

@@ -1,1 +1,1 @@
-SKIP_GO_VERSION_CHECK=y QEMUCMD=kata-qemu-lite-system-x86_64
+SKIP_GO_VERSION_CHECK=y QEMUCMD=kata-qemu-lite-system-x86_64 GOFLAGS="-mod=vendor"

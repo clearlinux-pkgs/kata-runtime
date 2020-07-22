@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Patrick McCarty <patrick.mccarty@intel.com>
+Date: Tue, 21 Jul 2020 19:08:24 -0700
+Subject: [PATCH] Enable static PIE build for shim
+
+Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index b1f13fd..37eb5e5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -528,7 +528,7 @@ $(TARGET_OUTPUT): $(SOURCES) $(GENERATED_FILES) $(MAKEFILE_LIST) | show-summary
+ 	$(QUIET_BUILD)(cd $(CLI_DIR) && go build $(BUILDFLAGS) -o $@ .)
+ 
+ $(SHIMV2_OUTPUT): $(SOURCES) $(GENERATED_FILES) $(MAKEFILE_LIST)
+-	$(QUIET_BUILD)(cd $(SHIMV2_DIR)/ && go build -i -o $@ .)
++	$(QUIET_BUILD)(cd $(SHIMV2_DIR)/ && go build $(BUILDFLAGS) -ldflags '-extldflags "-static-pie"' -tags netgo,osusergo -o $@ .)
+ 
+ .PHONY: \
+ 	check \
