@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 1.10.0
-Release  : 54
+Release  : 55
 URL      : https://github.com/kata-containers/runtime/archive/1.10.0.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/1.10.0.tar.gz
 Summary  : No detailed summary available
@@ -89,7 +89,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1595385078
+export SOURCE_DATE_EPOCH=1605149437
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
@@ -99,7 +99,7 @@ make  %{?_smp_mflags}  SKIP_GO_VERSION_CHECK=y QEMUCMD=kata-qemu-lite-system-x86
 
 
 %install
-export SOURCE_DATE_EPOCH=1595385078
+export SOURCE_DATE_EPOCH=1605149437
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/kata-runtime
 cp %{_builddir}/runtime-1.10.0/LICENSE %{buildroot}/usr/share/package-licenses/kata-runtime/7df059597099bb7dcf25d2a9aedfaf4465f72d8d
