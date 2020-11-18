@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 1.10.8
-Release  : 57
+Release  : 58
 URL      : https://github.com/kata-containers/runtime/archive/1.10.8.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/1.10.8.tar.gz
 Summary  : No detailed summary available
@@ -20,6 +20,7 @@ Patch1: 0001-Add-Clear-Linux-docker-integration-for-kata-containe.patch
 Patch2: 0002-Set-kata-runtime-as-default-runtime-for-cri-o.patch
 Patch3: 0003-Allow-extra-docker-opts-as-a-flag-to-dockerd.patch
 Patch4: 0004-Enable-static-PIE-build-for-shim.patch
+Patch5: 0005-Fix-tty-issue-in-go-1.15.x.patch
 
 %description
 This directory and sub directories contain generated code.
@@ -77,6 +78,7 @@ cd %{_builddir}/runtime-1.10.8
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %build
 ## build_prepend content
@@ -89,7 +91,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1605661148
+export SOURCE_DATE_EPOCH=1605665668
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
@@ -99,7 +101,7 @@ make  %{?_smp_mflags}  SKIP_GO_VERSION_CHECK=y QEMUCMD=kata-qemu-lite-system-x86
 
 
 %install
-export SOURCE_DATE_EPOCH=1605661148
+export SOURCE_DATE_EPOCH=1605665668
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/kata-runtime
 cp %{_builddir}/runtime-1.10.8/LICENSE %{buildroot}/usr/share/package-licenses/kata-runtime/7df059597099bb7dcf25d2a9aedfaf4465f72d8d

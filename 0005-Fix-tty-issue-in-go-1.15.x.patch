@@ -1,0 +1,37 @@
+From 00e923ba12e83df46ba5b15b8de70991a620c34c Mon Sep 17 00:00:00 2001
+From: Mark D Horn <mark.d.horn@intel.com>
+Date: Wed, 18 Nov 2020 09:19:02 -0800
+Subject: [PATCH] Fix tty issue in go 1.15.x
+
+https://github.com/golang/go/issues/29458
+https://github.com/creack/pty/issues/96
+
+Signed-off-by: Mark D Horn <mark.d.horn@intel.com>
+---
+ virtcontainers/shim.go | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/virtcontainers/shim.go b/virtcontainers/shim.go
+index 8ec7458b6e4d..5fa25496681c 100644
+--- a/virtcontainers/shim.go
++++ b/virtcontainers/shim.go
+@@ -207,10 +207,13 @@ func startShim(args []string, params ShimParams) (int, error) {
+ 		cmd.Stdout = f
+ 		cmd.Stderr = f
+ 		// Create Session
+-		cmd.SysProcAttr.Setsid = true
+ 		// Set Controlling terminal to Ctty
+-		cmd.SysProcAttr.Setctty = true
+-		cmd.SysProcAttr.Ctty = int(f.Fd())
++		cmd.SysProcAttr = &syscall.SysProcAttr{
++			Setsid:     true,
++			Setctty:    true,
++			Cloneflags: uintptr(cloneFlags),
++		}
++
+ 	}
+ 	defer func() {
+ 		if f != nil {
+-- 
+2.29.2
+
