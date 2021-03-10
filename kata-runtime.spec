@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 1.10.8
-Release  : 61
+Release  : 62
 URL      : https://github.com/kata-containers/runtime/archive/1.10.8.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/1.10.8.tar.gz
 Summary  : No detailed summary available
