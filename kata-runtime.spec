@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 20191207
-Release  : 67
+Release  : 68
 URL      : https://github.com/kata-containers/runtime/archive/20191207/runtime-20191207.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/20191207/runtime-20191207.tar.gz
 Summary  : No detailed summary available
@@ -91,17 +91,20 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1619116030
+export SOURCE_DATE_EPOCH=1624662199
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
 export FFLAGS="$FFLAGS -fno-lto "
 export CXXFLAGS="$CXXFLAGS -fno-lto "
+## make_prepend content
+export GO111MODULE="auto"
+## make_prepend end
 make  %{?_smp_mflags}  SKIP_GO_VERSION_CHECK=y QEMUCMD=kata-qemu-lite-system-x86_64 GOFLAGS="-mod=vendor"
 
 
 %install
-export SOURCE_DATE_EPOCH=1619116030
+export SOURCE_DATE_EPOCH=1624662199
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/kata-runtime
 cp %{_builddir}/runtime-20191207/LICENSE %{buildroot}/usr/share/package-licenses/kata-runtime/7df059597099bb7dcf25d2a9aedfaf4465f72d8d
