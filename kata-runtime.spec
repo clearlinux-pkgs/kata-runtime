@@ -4,7 +4,7 @@
 #
 Name     : kata-runtime
 Version  : 20191207
-Release  : 71
+Release  : 72
 URL      : https://github.com/kata-containers/runtime/archive/20191207/runtime-20191207.tar.gz
 Source0  : https://github.com/kata-containers/runtime/archive/20191207/runtime-20191207.tar.gz
 Summary  : No detailed summary available
